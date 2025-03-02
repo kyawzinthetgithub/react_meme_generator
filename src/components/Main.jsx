@@ -7,19 +7,30 @@ export default function Main() {
     bottomText: "Walk into Mordor",
     imageUrl: "http://i.imgflip.com/1bij.jpg",
   });
-  const [allMemes,setAllMemes] = useState([]);
 
-  useEffect(()=>{
-    fetch('https://api.imgflip.com/get_memes')
-    .then(res => res.json())
-    .then(data => setAllMemes(data.data.memes))
-  },[]);
+  const [allMemes, setAllMemes] = useState([]);
+
+  useEffect(() => {
+    fetch("https://api.imgflip.com/get_memes")
+      .then((res) => res.json())
+      .then((data) => setAllMemes(data.data.memes));
+  }, []);
 
   const handleChange = (event) => {
     const { value, name } = event.currentTarget;
     setMeme((oldMeme) => ({
       ...oldMeme,
       [name]: value,
+    }));
+  };
+
+  //generate random image
+  const handleImage = () => {
+    const randomIdx = Math.floor(Math.random() * allMemes.length);
+    const memeImg = allMemes[randomIdx].url;
+    setMeme((oldMeme) => ({
+      ...oldMeme,
+      imageUrl:memeImg
     }));
   };
 
@@ -47,9 +58,9 @@ export default function Main() {
             onChange={(e) => handleChange(e)}
           />
         </label>
-        <button className="getImageBtn">
+        <button onClick={handleImage} className="getImageBtn">
           Get a new meme image
-          <ImageSvg color={'white'} />
+          <ImageSvg color={"white"} />
         </button>
       </div>
       <div className="meme">
